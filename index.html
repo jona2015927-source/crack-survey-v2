@@ -97,8 +97,8 @@ const FIELDS=[
 ];
 let activeField=0,stream=null,facingMode='environment',shotsTaken=0,currentLbUrl='';
 function getVal(i){return FIELDS[i].opts[FIELDS[i].idx];}
-function renderAll(){FIELDS.forEach((f,i)=>{document.getElementById('val-'+i).textContent=getVal(i);document.getElementById('blk-'+i).classList.toggle('active',i===activeField);});}
-function step(fi,d){const f=FIELDS[fi];f.idx=(f.idx+d+f.opts.length)%f.opts.length;activeField=fi;renderAll();}
+function renderAll(){FIELDS.forEach(function(f,i){document.getElementById('val-'+i).textContent=getVal(i);document.getElementById('blk-'+i).classList.toggle('active',i===activeField);});}
+function step(fi,d){var f=FIELDS[fi];f.idx=(f.idx+d+f.opts.length)%f.opts.length;activeField=fi;renderAll();}
 function resetAll(){FIELDS[0].idx=4;FIELDS[1].idx=0;FIELDS[2].idx=0;FIELDS[3].idx=0;FIELDS[4].idx=0;renderAll();}
 function startCamera(){
   navigator.mediaDevices.getUserMedia({video:{facingMode:facingMode,width:{ideal:1280},height:{ideal:720}},audio:false})
@@ -107,8 +107,7 @@ function startCamera(){
     document.getElementById('video').srcObject=s;
     document.getElementById('start-screen').style.display='none';
   })
-  .catch(function(e){alert('相機錯誤：'+e.name+'
-'+e.message);});
+  .catch(function(e){alert('相機錯誤：'+e.name+'\n'+e.message);});
 }
 function flipCamera(){
   facingMode=facingMode==='environment'?'user':'environment';
@@ -153,8 +152,7 @@ function capturePhoto(){
 }
 function showToast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2000);}
 function addThumb(s){var b=document.getElementById('preview-bar'),i=document.createElement('img');i.src=s;i.className='thumb';i.onclick=function(){openLightbox(s);};b.appendChild(i);b.scrollLeft=b.scrollWidth;}
-function openLightbox(s){currentLbUrl=s;document.getElementById('lb-img').src=s;document.getElementById('lb-info').textContent=getVal(0)+' ・ '+getVal(1)+' ・ '+getVal(2)+'
-寬度 '+getVal(3)+' ・ 長度 '+getVal(4);document.getElementById('lightbox').classList.add('show');}
+function openLightbox(s){currentLbUrl=s;document.getElementById('lb-img').src=s;document.getElementById('lb-info').textContent=getVal(0)+' ・ '+getVal(1)+' ・ '+getVal(2)+'\n寬度 '+getVal(3)+' ・ 長度 '+getVal(4);document.getElementById('lightbox').classList.add('show');}
 function lbClose(){document.getElementById('lightbox').classList.remove('show');}
 function lbSave(){var a=document.createElement('a');a.href=currentLbUrl;a.download='crack_'+getVal(0)+'_'+Date.now()+'.jpg';a.click();showToast('正在儲存...');lbClose();}
 function rr(x,px,py,w,h,r){x.beginPath();x.moveTo(px+r,py);x.lineTo(px+w-r,py);x.quadraticCurveTo(px+w,py,px+w,py+r);x.lineTo(px+w,py+h-r);x.quadraticCurveTo(px+w,py+h,px+w-r,py+h);x.lineTo(px+r,py+h);x.quadraticCurveTo(px,py+h,px,py+h-r);x.lineTo(px,py+r);x.quadraticCurveTo(px,py,px+r,py);x.closePath();}
